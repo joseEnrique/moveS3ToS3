@@ -1,0 +1,18 @@
+version: "3.7"
+services:
+  books_db:
+    image: andrewgaul/s3proxy
+    environment:
+      S3PROXY_AUTHORIZATION: none
+    ports:
+      - "8080:80"
+  mariadb:
+    image: "mariadb"
+    restart: 'always'
+    ports:
+    - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "rootpassword"
+      MYSQL_DATABASE: "sketch"
+      MYSQL_USER: "sketchUser"
+      MYSQL_PASSWORD: "sketchPassword"
