@@ -2,14 +2,6 @@ import boto3
 
 s3 = boto3.resource('s3', endpoint_url='http://localhost:8080',)
 
-new_bucket_name = "new"
-bucket_to_copy = "legacy"
-
-copy_source = {
-    'Bucket': 'legacy',
-    'Key': '1'
- }
-s3.meta.client.copy(copy_source, new_bucket_name, '1')
 
 def get_matching_s3_keys(bucket, prefix='', suffix=''):
     """
