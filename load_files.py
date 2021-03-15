@@ -1,7 +1,6 @@
-
 import boto3
 
-from db import  Pictures, generate_metadata, generate_session
+from db import Pictures, generate_metadata, generate_session
 
 session = boto3.session.Session()
 
@@ -13,6 +12,7 @@ s3_client = session.client(
 
 generate_metadata()
 session = generate_session()
+
 
 def load_data(i):
     res = s3_client.put_object(Bucket='legacy', Key=str(i), Body=str(i))
@@ -26,6 +26,6 @@ def load_data(i):
 
 
 if __name__ == "__main__":
-    for i in range(100000):
-        print (i)
+    for i in range(100000,1000000):
+        print(i)
         load_data(i)
