@@ -1,17 +1,17 @@
 import boto3
-from boto3 import s3
 from sqlalchemy import func
 
+from config import OLD_BUCKET, NEW_BUCKET, URL_ENDPOINT
 from db import Images
 
 
-class DtoS3:
+class S3Utils:
     @staticmethod
     def get_s3_resource():
-        return boto3.resource('s3', endpoint_url='http://localhost:8080')
+        return boto3.resource('s3', endpoint_url=URL_ENDPOINT)
 
     @staticmethod
-    def transfer_s3_to_s3(s3session, old_key, new_key, new_bucket_name="new", bucket_to_copy="legacy") -> bool:
+    def transfer_s3_to_s3(s3session, old_key, new_key, new_bucket_name=NEW_BUCKET, bucket_to_copy=OLD_BUCKET):
         try:
             copy_source = {
                 'Bucket': bucket_to_copy,
@@ -24,7 +24,7 @@ class DtoS3:
             return False
 
 
-class DtoMaria:
+class MariaUtils:
     @staticmethod
     def get_not_processed_key(session, limit=5):
         while session.query(Images).filter(Images.new_key == None).count() > 0:

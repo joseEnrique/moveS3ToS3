@@ -2,11 +2,13 @@ import sqlalchemy as db
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+from config import MYSQL_URL
+
 base = declarative_base()
 
 
 def connection_mariaDB():
-    return db.create_engine("mysql+pymysql://sketchUser:sketchPassword@localhost/sketch")
+    return db.create_engine(MYSQL_URL)
 
 
 def generate_metadata():
@@ -14,9 +16,9 @@ def generate_metadata():
 
 
 def generate_session():
-    Session = sessionmaker()
-    Session.configure(bind=connection_mariaDB())
-    return Session()
+    session = sessionmaker()
+    session.configure(bind=connection_mariaDB())
+    return session()
 
 
 class Images(base):
