@@ -19,7 +19,8 @@ def generate_session():
     return Session()
 
 
-class Pictures(base):
-    __tablename__ = "Pictures"
-    old_route = db.Column(db.String(255), primary_key=True)
-    new_route = db.Column(db.String(255))
+class Images(base):
+    __tablename__ = "images"
+    name = db.Column(db.String(255), primary_key=True)
+    old_key = db.Column(db.String(255))
+    new_key = db.Column(db.String(255))
