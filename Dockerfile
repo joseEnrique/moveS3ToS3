@@ -1,7 +1,9 @@
 FROM python:3-alpine
 
 RUN adduser -D worker
+
 USER worker
+
 WORKDIR /home/worker
 
 COPY ./ .

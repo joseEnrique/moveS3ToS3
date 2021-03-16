@@ -4,7 +4,7 @@ import requests
 
 from config import NEW_BUCKET, OLD_BUCKET, NEW_PREFIX, OLD_PREFIX, LOAD_FILES, URL_ENDPOINT
 from db import generate_session, generate_metadata
-from load_files import load_data
+from load_files import load_object, mp_load
 from utils import MariaUtils, S3Utils
 
 if __name__ == '__main__':
@@ -15,9 +15,7 @@ if __name__ == '__main__':
     if LOAD_FILES in ['true', 'True', 'yes']:
         requests.put(f'{URL_ENDPOINT}/{OLD_BUCKET}')
         requests.put(f'{URL_ENDPOINT}/{NEW_BUCKET}')
-
-        for name_i in range(10000):
-            load_data(session, s3, name_i)
+        mp_load()
         logging.info("Loaded !")
 
     for object_not_migrated in MariaUtils.get_not_processed_key(session):
@@ -27,4 +25,5 @@ if __name__ == '__main__':
         if transferred:
             MariaUtils.update_element(session, object_not_migrated, new_key)
             logging.info("Processed", object_not_migrated.old_key)
-        logging.info("Done !")
+
+    logging.info("Done !")

@@ -1,6 +1,7 @@
 import logging
 
 import sqlalchemy as db
+from pymysql import OperationalError
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -10,7 +11,11 @@ base = declarative_base()
 
 
 def connection_mariaDB():
-    return db.create_engine(MYSQL_URL)
+    try:
+        return db.create_engine(MYSQL_URL)
+    except OperationalError:
+        raise
+
 
 
 def generate_metadata():

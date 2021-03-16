@@ -21,6 +21,11 @@ services:
       MYSQL_DATABASE: sketch
       MYSQL_USER: sketchUser
       MYSQL_PASSWORD: sketchPassword
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost", "-u", "root","-prootpassword" ]
+      interval: 3s
+      timeout: 5s
+      retries: 5
   service_automation:
     build: .
     environment:
@@ -33,6 +38,8 @@ services:
       LOAD_FILES: "True"
     depends_on:
       s3proxy:
+        condition: service_healthy
+      mariadb:
         condition: service_healthy
 
 
