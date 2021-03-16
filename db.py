@@ -1,3 +1,5 @@
+import logging
+
 import sqlalchemy as db
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -12,13 +14,21 @@ def connection_mariaDB():
 
 
 def generate_metadata():
-    base.metadata.create_all(bind=connection_mariaDB())
+    try:
+        base.metadata.create_all(bind=connection_mariaDB())
+    except Exception as e:
+        logging.error(e)
+        raise
 
 
 def generate_session():
-    session = sessionmaker()
-    session.configure(bind=connection_mariaDB())
-    return session()
+    try:
+        session = sessionmaker()
+        session.configure(bind=connection_mariaDB())
+        return session()
+    except Exception as e:
+        logging.error(e)
+        raise
 
 
 class Images(base):

@@ -1,29 +1,17 @@
-import boto3
+import boto3, logging
 
 from config import OLD_BUCKET, OLD_PREFIX
 from db import Images, generate_metadata, generate_session
 from utils import S3Utils
 
-session = boto3.session.Session()
 
-s3_client = S3Utils.get_s3_resource()
-generate_metadata()
-session = generate_session()
-
-print(s3_client)
-
-
-def load_data(i):
-    object = s3_client.Object(OLD_BUCKET, f'{OLD_PREFIX}/{i}.png')
-    object.put(Body=f'body of {i}')
+def load_data(session, s3, name):
+    object = s3.Object(OLD_BUCKET, f'{OLD_PREFIX}/{name}.png')
+    object.put(Body=f'body of {name}')
     try:
-        new_rec = Images(name=f'{i}.png', old_key=f'{OLD_PREFIX}/{i}.png')
+        new_rec = Images(name=f'{name}.png', old_key=f'{OLD_PREFIX}/{name}.png')
         session.add(new_rec)
         session.commit()
     except Exception as e:
+        logging.error(e)
         session.rollback()
-
-
-if __name__ == '__main__':
-    for i in range(1000000):
-        load_data(i)

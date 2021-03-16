@@ -1,18 +1,38 @@
 version: "3.7"
 services:
-  books_db:
+  s3proxy:
     image: andrewgaul/s3proxy
     environment:
       S3PROXY_AUTHORIZATION: none
     ports:
       - "8080:80"
+    healthcheck:
+      test: [ "CMD-SHELL", "apk add curl && curl localhost" ]
+      interval: 3s
+      timeout: 5s
+      retries: 5
   mariadb:
     image: "mariadb"
     restart: 'always'
     ports:
     - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: "rootpassword"
-      MYSQL_DATABASE: "sketch"
-      MYSQL_USER: "sketchUser"
-      MYSQL_PASSWORD: "sketchPassword"
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: sketch
+      MYSQL_USER: sketchUser
+      MYSQL_PASSWORD: sketchPassword
+  service_automation:
+    build: .
+    environment:
+      URL_ENDPOINT: http://s3proxy
+      OLD_BUCKET: legacy-s3
+      OLD_PREFIX: images
+      NEW_BUCKET: production-s3
+      NEW_PREFIX: avatar
+      MYSQL_URL: mysql+pymysql://sketchUser:sketchPassword@mariadb/sketch
+      LOAD_FILES: "True"
+    depends_on:
+      s3proxy:
+        condition: service_healthy
+
+

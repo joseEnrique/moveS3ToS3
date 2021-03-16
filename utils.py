@@ -1,3 +1,5 @@
+import logging
+
 import boto3
 from sqlalchemy import func
 
