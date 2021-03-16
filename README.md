@@ -7,7 +7,7 @@ Process to move objects between two differents S3 buckets.
 1. __[gaul/s3proxy](https://github.com/gaul/s3proxy)__. S3 emulation to have the S3 API functionalities
 2. __mariadb__. Db to save the old, and the new route of each document. Used for a tracking purpose
 
-## Variables
+## ENV Variables
 
 | Variable      | Description | Default value     |
 | :---        |    :---:   |          :----: |
