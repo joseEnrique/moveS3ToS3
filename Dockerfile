@@ -6,7 +6,7 @@ USER worker
 
 WORKDIR /home/worker
 
-COPY ./ .
+COPY ./src/ .
 
 ENV PATH="/home/worker/.local/bin:${PATH}"
 
